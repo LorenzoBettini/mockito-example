@@ -15,13 +15,9 @@ public class EmployeeManagerTest {
 
 	private EmployeeRepository employeeRepository;
 
-	private List<Employee> employees;
-
 	@Before
 	public void setup() {
-		employees = new ArrayList<>();
 		employeeRepository = mock(EmployeeRepository.class);
-		when(employeeRepository.findAll()).thenReturn(employees);
 		employeeManager = new EmployeeManager(employeeRepository);
 	}
 
@@ -33,8 +29,9 @@ public class EmployeeManagerTest {
 
 	@Test
 	public void testPayEmployeesWhenOneEmployeeIsPresent() {
-		// why do we add something to this list?!
+		List<Employee> employees = new ArrayList<>();
 		employees.add(new Employee("1", 1000));
+		when(employeeRepository.findAll()).thenReturn(employees);
 		assertThat(employeeManager.payEmployees()).isEqualTo(1);
 	}
 }
