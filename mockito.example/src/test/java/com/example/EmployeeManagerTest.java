@@ -24,4 +24,8 @@ public class EmployeeManagerTest {
 		assertThat(numberOfPayments).isEqualTo(0);
 	}
 
+	@Test
+	public void testPayEmployeesWhenOneEmployeeIsPresent() {
+		assertThat(employeeManager.payEmployees()).isEqualTo(1);
+	}
 }
