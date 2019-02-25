@@ -14,10 +14,13 @@ public class EmployeeManagerTest {
 
 	private EmployeeRepository employeeRepository;
 
+	private BankService bankService;
+
 	@Before
 	public void setup() {
 		employeeRepository = mock(EmployeeRepository.class);
-		employeeManager = new EmployeeManager(employeeRepository);
+		bankService = mock(BankService.class);
+		employeeManager = new EmployeeManager(employeeRepository, bankService);
 	}
 
 	@Test
