@@ -36,5 +36,6 @@ public class EmployeeManagerTest {
 		when(employeeRepository.findAll())
 			.thenReturn(asList(new Employee("1", 1000)));
 		assertThat(employeeManager.payEmployees()).isEqualTo(1);
+		verify(bankService).pay("1", 1000);
 	}
 }
