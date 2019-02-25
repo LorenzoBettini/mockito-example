@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 public class EmployeeManagerTest {
 
@@ -48,6 +49,20 @@ public class EmployeeManagerTest {
 		assertThat(employeeManager.payEmployees()).isEqualTo(2);
 		verify(bankService).pay("2", 2000);
 		verify(bankService).pay("1", 1000);
+		verifyNoMoreInteractions(bankService);
+	}
+
+	@Test
+	public void testPayEmployeesInOrderWhenSeveralEmployeeArePresent() {
+		// an example of invocation order verification
+		when(employeeRepository.findAll())
+				.thenReturn(asList(
+						new Employee("1", 1000),
+						new Employee("2", 2000)));
+		assertThat(employeeManager.payEmployees()).isEqualTo(2);
+		InOrder inOrder = inOrder(bankService);
+		inOrder.verify(bankService).pay("1", 1000);
+		inOrder.verify(bankService).pay("2", 2000);
 		verifyNoMoreInteractions(bankService);
 	}
 }
