@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.List;
+
 public class EmployeeManager {
 
 	private EmployeeRepository employeeRepository;
@@ -11,7 +13,10 @@ public class EmployeeManager {
 	}
 
 	public int payEmployees() {
-		return employeeRepository.findAll().size();
+		List<Employee> employees = employeeRepository.findAll();
+		Employee employee = employees.get(0);
+		bankService.pay(employee.getId(), employee.getSalary());
+		return employees.size();
 	}
 
 }
