@@ -9,7 +9,7 @@ public class EmployeeManager {
 	}
 
 	public int payEmployees() {
-		return 0;
+		return employeeRepository.findAll().size();
 	}
 
 }
