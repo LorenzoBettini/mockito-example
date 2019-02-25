@@ -14,8 +14,7 @@ public class EmployeeManager {
 
 	public int payEmployees() {
 		List<Employee> employees = employeeRepository.findAll();
-		if (!employees.isEmpty()) {
-			Employee employee = employees.get(0);
+		for (Employee employee : employees) {
 			bankService.pay(employee.getId(), employee.getSalary());
 		}
 		return employees.size();
