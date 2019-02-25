@@ -2,6 +2,7 @@ package com.example;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -132,6 +133,24 @@ public class EmployeeManagerTest {
 		doThrow(new RuntimeException())
 			.doNothing()
 			.when(bankService).pay(anyString(), anyDouble());
+		// number of payments must be 1
+		assertThat(employeeManager.payEmployees()).isEqualTo(1);
+		// make sure that Employee.paid is updated accordingly
+		verify(notToBePaid).setPaid(false);
+		verify(toBePaid).setPaid(true);
+	}
+
+	@Test
+	public void testArgumentMatcherExample() {
+		// equivalent to the previous test, with argument matcher
+		Employee notToBePaid = spy(new Employee("1", 1000));
+		Employee toBePaid = spy(new Employee("2", 2000));
+		when(employeeRepository.findAll())
+			.thenReturn(asList(notToBePaid, toBePaid));
+		doThrow(new RuntimeException())
+			.when(bankService).pay(
+					argThat(s -> s.equals("1")),
+					anyDouble());
 		// number of payments must be 1
 		assertThat(employeeManager.payEmployees()).isEqualTo(1);
 		// make sure that Employee.paid is updated accordingly
