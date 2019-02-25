@@ -65,4 +65,19 @@ public class EmployeeManagerTest {
 		inOrder.verify(bankService).pay("2", 2000);
 		verifyNoMoreInteractions(bankService);
 	}
+
+	@Test
+	public void testExampleOfInOrderWithTwoMocks() {
+		// Just an example of invocation order verification on several mocks
+		when(employeeRepository.findAll())
+				.thenReturn(asList(
+						new Employee("1", 1000),
+						new Employee("2", 2000)));
+		assertThat(employeeManager.payEmployees()).isEqualTo(2);
+		InOrder inOrder = inOrder(bankService, employeeRepository);
+		inOrder.verify(employeeRepository).findAll();
+		inOrder.verify(bankService).pay("1", 1000);
+		inOrder.verify(bankService).pay("2", 2000);
+		verifyNoMoreInteractions(bankService);
+	}
 }
