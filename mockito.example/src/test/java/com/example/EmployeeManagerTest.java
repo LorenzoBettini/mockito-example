@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 public class EmployeeManagerTest {
@@ -78,6 +79,23 @@ public class EmployeeManagerTest {
 		inOrder.verify(employeeRepository).findAll();
 		inOrder.verify(bankService).pay("1", 1000);
 		inOrder.verify(bankService).pay("2", 2000);
+		verifyNoMoreInteractions(bankService);
+	}
+
+	@Test
+	public void testExampleOfArgumentCaptor() {
+		// Just an example of ArgumentCaptor
+		when(employeeRepository.findAll())
+				.thenReturn(asList(
+						new Employee("1", 1000),
+						new Employee("2", 2000)));
+		assertThat(employeeManager.payEmployees()).isEqualTo(2);
+		ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
+		ArgumentCaptor<Double> amountCaptor = ArgumentCaptor.forClass(Double.class);
+		verify(bankService, times(2))
+			.pay(idCaptor.capture(), amountCaptor.capture());
+		assertThat(idCaptor.getAllValues()).containsExactly("1", "2");
+		assertThat(amountCaptor.getAllValues()).containsExactly(1000.0, 2000.0);
 		verifyNoMoreInteractions(bankService);
 	}
 }
