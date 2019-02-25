@@ -98,4 +98,15 @@ public class EmployeeManagerTest {
 		assertThat(amountCaptor.getAllValues()).containsExactly(1000.0, 2000.0);
 		verifyNoMoreInteractions(bankService);
 	}
+
+	@Test
+	public void testEmployeeSetPaidIsCalledAfterPaying() {
+		Employee employee = spy(new Employee("1", 1000));
+		when(employeeRepository.findAll())
+				.thenReturn(asList(employee));
+		assertThat(employeeManager.payEmployees()).isEqualTo(1);
+		InOrder inOrder = inOrder(bankService, employee);
+		inOrder.verify(bankService).pay("1", 1000);
+		inOrder.verify(employee).setPaid(true);
+	}
 }
