@@ -46,6 +46,8 @@ public class EmployeeManagerTest {
 					new Employee("1", 1000),
 					new Employee("2", 2000)));
 		assertThat(employeeManager.payEmployees()).isEqualTo(2);
-		verify(bankService, times(2)).pay(anyString(), anyDouble());
+		verify(bankService).pay("2", 2000);
+		verify(bankService).pay("1", 1000);
+		verifyNoMoreInteractions(bankService);
 	}
 }
