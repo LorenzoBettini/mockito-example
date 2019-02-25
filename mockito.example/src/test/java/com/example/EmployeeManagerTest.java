@@ -109,4 +109,17 @@ public class EmployeeManagerTest {
 		inOrder.verify(bankService).pay("1", 1000);
 		inOrder.verify(employee).setPaid(true);
 	}
+
+	@Test
+	public void testPayEmployeesWhenBankServiceThrowsException() {
+		Employee employee = spy(new Employee("1", 1000));
+		when(employeeRepository.findAll())
+				.thenReturn(asList(employee));
+		doThrow(new RuntimeException())
+				.when(bankService).pay(anyString(), anyDouble());
+		// number of payments must be 0
+		assertThat(employeeManager.payEmployees()).isEqualTo(0);
+		// make sure that Employee.paid is updated accordingly
+		verify(employee).setPaid(false);
+	}
 }
