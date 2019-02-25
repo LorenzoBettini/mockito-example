@@ -1,6 +1,7 @@
 package com.example;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,9 +10,12 @@ public class EmployeeManagerTest {
 
 	private EmployeeManager employeeManager;
 
+	private EmployeeRepository employeeRepository;
+
 	@Before
 	public void setup() {
-		employeeManager = new EmployeeManager();
+		employeeRepository = mock(EmployeeRepository.class);
+		employeeManager = new EmployeeManager(employeeRepository);
 	}
 
 	@Test
