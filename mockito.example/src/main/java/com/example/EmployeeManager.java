@@ -27,6 +27,7 @@ public class EmployeeManager {
 				payments++;
 			} catch (RuntimeException e) {
 				LOGGER.error("Failed payment of " + employee, e);
+				employee.setPaid(false);
 			}
 		}
 		return payments;
