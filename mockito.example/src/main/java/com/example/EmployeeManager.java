@@ -19,15 +19,17 @@ public class EmployeeManager {
 
 	public int payEmployees() {
 		List<Employee> employees = employeeRepository.findAll();
+		int payments = 0;
 		for (Employee employee : employees) {
 			try {
 				bankService.pay(employee.getId(), employee.getSalary());
 				employee.setPaid(true);
-			} catch (Exception e) {
+				payments++;
+			} catch (RuntimeException e) {
 				LOGGER.error("Failed payment of " + employee, e);
 			}
 		}
-		return employees.size();
+		return payments;
 	}
 
 }
