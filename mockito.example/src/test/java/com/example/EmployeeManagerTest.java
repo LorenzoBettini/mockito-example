@@ -38,4 +38,14 @@ public class EmployeeManagerTest {
 		assertThat(employeeManager.payEmployees()).isEqualTo(1);
 		verify(bankService).pay("1", 1000);
 	}
+
+	@Test
+	public void testPayEmployeesWhenSeveralEmployeesArePresent() {
+		when(employeeRepository.findAll())
+			.thenReturn(asList(
+					new Employee("1", 1000),
+					new Employee("2", 2000)));
+		assertThat(employeeManager.payEmployees()).isEqualTo(2);
+		verify(bankService, times(2)).pay(anyString(), anyDouble());
+	}
 }
