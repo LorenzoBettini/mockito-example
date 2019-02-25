@@ -1,6 +1,7 @@
 package com.example;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -21,8 +22,10 @@ public class EmployeeManagerTest {
 
 	@Test
 	public void testPayEmployeesWhenNoEmployeesArePresent() {
-		int numberOfPayments = employeeManager.payEmployees();
-		assertThat(numberOfPayments).isEqualTo(0);
+		when(employeeRepository.findAll())
+			.thenReturn(emptyList());
+		assertThat(employeeManager.payEmployees())
+			.isEqualTo(0);
 	}
 
 	@Test
