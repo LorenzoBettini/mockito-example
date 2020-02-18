@@ -5,6 +5,7 @@ import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.AdditionalAnswers.answer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -151,6 +152,44 @@ public class EmployeeManagerTest {
 			.when(bankService).pay(
 					argThat(s -> s.equals("1")),
 					anyDouble());
+		// number of payments must be 1
+		assertThat(employeeManager.payEmployees()).isEqualTo(1);
+		// make sure that Employee.paid is updated accordingly
+		verify(notToBePaid).setPaid(false);
+		verify(toBePaid).setPaid(true);
+	}
+
+	@Test
+	public void testDoAnswerExample() {
+		// equivalent to the previous test, with Answer
+		Employee notToBePaid = spy(new Employee("1", 1000));
+		Employee toBePaid = spy(new Employee("2", 2000));
+		when(employeeRepository.findAll())
+			.thenReturn(asList(notToBePaid, toBePaid));
+		doAnswer(invocation -> {
+				if (invocation.getArgument(0, String.class).equals("1"))
+					throw new RuntimeException();
+				return null;
+			}).when(bankService).pay(anyString(), anyDouble());
+		// number of payments must be 1
+		assertThat(employeeManager.payEmployees()).isEqualTo(1);
+		// make sure that Employee.paid is updated accordingly
+		verify(notToBePaid).setPaid(false);
+		verify(toBePaid).setPaid(true);
+	}
+
+	@Test
+	public void testDoAnswer2Example() {
+		// equivalent to the previous test, with Answer2
+		Employee notToBePaid = spy(new Employee("1", 1000));
+		Employee toBePaid = spy(new Employee("2", 2000));
+		when(employeeRepository.findAll())
+			.thenReturn(asList(notToBePaid, toBePaid));
+		doAnswer(answer((String id, Double amount) -> {
+				if (id.equals("1"))
+					throw new RuntimeException();
+				return null;
+			})).when(bankService).pay(anyString(), anyDouble());
 		// number of payments must be 1
 		assertThat(employeeManager.payEmployees()).isEqualTo(1);
 		// make sure that Employee.paid is updated accordingly
