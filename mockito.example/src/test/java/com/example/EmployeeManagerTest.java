@@ -5,6 +5,9 @@ import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
 import static org.mockito.AdditionalAnswers.answer;
 
 import org.junit.Before;
@@ -195,5 +198,30 @@ public class EmployeeManagerTest {
 		// make sure that Employee.paid is updated accordingly
 		verify(notToBePaid).setPaid(false);
 		verify(toBePaid).setPaid(true);
+	}
+
+	@Test
+	public void exampleOfBadStubbingWithAnswer() {
+		when(employeeRepository.findAll())
+			.thenReturn(asList(
+					new Employee("1", 1000),
+					new Employee("2", 2000)));
+		when(employeeRepository.findById(anyString()))
+			.thenAnswer(answer(id ->
+				employeeRepository.findAll()
+						.stream()
+						.filter(e -> e.getId().equals(id))
+						.findFirst()
+			));
+		// call the SUT that uses EmployeeRepository.findById("1")
+		// do verifications
+	}
+
+	@Test
+	public void exampleOfGoodStubbing() {
+		when(employeeRepository.findById("1"))
+			.thenReturn(Optional.of(new Employee("1", 1000)));
+		// call the SUT that uses EmployeeRepository.findById("1")
+		// do verifications
 	}
 }
