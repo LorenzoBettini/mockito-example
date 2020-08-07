@@ -45,8 +45,8 @@ public class TransactionalEmployeeManagerTest {
 		verify(bankService).pay("1", 1000);
 		verify(employeeRepository).save(employee1);
 		verify(employeeRepository).save(employee2);
-		// also verify that all repository interactions pass through transactions
-		verify(transactionManager, times(3)).doInTransaction(any());
+		// also verify that a single transaction is executed
+		verify(transactionManager, times(1)).doInTransaction(any());
 	}
 
 }
