@@ -48,7 +48,7 @@ public class EmployeeManagerBDDTest {
 	public void testPayEmployeesWhenNoEmployeesArePresent() {
 		given(employeeRepository.findAll())
 			.willReturn(emptyList());
-		assertThat(employeeManager.payEmployees()).isEqualTo(0);
+		assertThat(employeeManager.payEmployees()).isZero();
 	}
 
 	@Test
@@ -120,7 +120,7 @@ public class EmployeeManagerBDDTest {
 			.willReturn(asList(notToBePaid));
 		willThrow(new RuntimeException()).given(bankService).pay(anyString(), anyDouble());
 		// number of payments must be 0
-		assertThat(employeeManager.payEmployees()).isEqualTo(0);
+		assertThat(employeeManager.payEmployees()).isZero();
 		// make sure that Employee.paid is updated accordingly
 		then(notToBePaid).should().setPaid(false);
 	}
