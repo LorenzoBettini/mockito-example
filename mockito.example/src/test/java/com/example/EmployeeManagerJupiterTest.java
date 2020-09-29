@@ -13,17 +13,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class EmployeeManagerJupiterTest {
 
 	@Mock
@@ -46,18 +46,6 @@ class EmployeeManagerJupiterTest {
 
 	@Spy
 	private Employee toBePaid = new Employee("2", 2000);
-
-	private AutoCloseable closeable;
-
-	@BeforeEach
-	public void setup() {
-		closeable = MockitoAnnotations.openMocks(this);
-	}
-
-	@AfterEach
-	public void releaseMocks() throws Exception {
-		closeable.close();
-	}
 
 	@Test
 	void testPayEmployeesWhenNoEmployeesArePresent() {
