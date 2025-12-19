@@ -17,7 +17,7 @@
     <junit.version>4.13.2</junit.version>
     <assertj.version>3.27.3</assertj.version>
     <mockito.version>4.11.0</mockito.version>
-    <log4j.version>2.24.3</log4j.version>
+    <log4j.version>2.25.3</log4j.version>
   </properties>
 
   <dependencies>
